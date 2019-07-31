@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+
+
+<div class="container">
+    {% for post in posts %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" style="padding:30px; ">
+
+            {% if post.image %}
+            <img src="{{ post.image.url }}" class="card-img-top img-responsive">
+            {% endif %}
+            <div class="card-body" style="border-bottom: 3px solid red; font-family: 'Open Sans', sans-serif; font-size: 20px; line-height: 150%;">
+                <h3 class="card-title" style="font-family: 'Abril Fatface', cursive; font-size: 40px; text-align:center;"><a href="{{ post.get_absolute_url }}"> {{ post.title }}</a></h3>
+                <p class="card-text">{{ post.content|safe|linebreaks|truncatechars:250 }}</p><br>
+                <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">İncele</a>
+                    {% if request.user.is_authenticated %}
+                    <a href="{{ post.get_update_url }}" class="btn btn-default" role="button">Güncelle</a>
+                    <a href="{{ post.get_delete_url }}" class="btn btn-danger" role="button">Sil</a>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="card-footer">
+                <h4> {{ post.user }} <small style="float: right;"> {{ post.publishing_date|timesince }} önce
+                    </small>
+                </h4>
+            </div>
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" style="padding:30px; ">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if posts.has_previous %}
+                    <a href="?sayfa={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Geri</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Sayfa {{ posts.number }} - {{ posts.paginator.num_pages }}.
+                    </span>
+
+                    {% if posts.has_next %}
+                    <a href="?sayfa={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">İleri</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

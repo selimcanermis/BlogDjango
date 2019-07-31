@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Anasayfa - {{ block.super }}
+{% endblock %}
+
+{% block body %}
+
+Merhaba, {{ request.user.get_full_name }}
+
+<meta http-equiv="Refresh" content="0; URL=http://localhost:8000/post/index/">
+
+
+{% endblock %}

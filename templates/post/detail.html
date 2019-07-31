@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10" style="margin-bottom:60px; margin-top:10px;">
+            <div class="cerceve" style="border-style: groove; border-radius: 10px; background-color:#F5FFFA; padding:20px; font-family: 'Open Sans', sans-serif; font-size: 20px; line-height: 150%;">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img-top img-responsive">
+                {% endif %}
+                <div class="card-body" style="border-bottom: 3px solid red;">
+                    <h3 class="card-title" style="font-family: 'Abril Fatface', cursive; font-size: 40px; text-align:center;">{{ post.title }}</h3>
+                    <p class="card-text">{{ post.content|safe|linebreaks }}</p><br>
+                    <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">İncele</a>
+                        {% if request.user.is_authenticated %}
+                        <a href="{{ post.get_update_url }}" class="btn btn-default" role="button">Güncelle</a>
+                        <a href="{{ post.get_delete_url }}" class="btn btn-danger" role="button">Sil</a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <h4> {{ post.user }} <small style="float: right;">{{ post.publishing_date|timesince }} önce
+                        </small></h4>
+                </div>
+            </div>
+
+            <br><br>
+            <hr>
+            <h3>Yorum Ekle</h3>
+            {% include 'post/comment.html' %}
+            
+
+            {% for comment in post.comments.all %}
+            <div style="background-color: #F5FFFA;"><hr>
+            <h4> {{ comment.name }} <small style="float: right;"> {{ comment.created_date|timesince }} önce </small></h4>
+            <p> {{ comment.content|linebreaks }} </p>
+            <p style="border-bottom: 2px solid red;"></p>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+{% endblock %}
